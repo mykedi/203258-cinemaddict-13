@@ -1,4 +1,4 @@
-export const createExtraFilmsCardTemplate = () => {
+export const createExtraFilmCardTemplate = () => {
   return `<article class="film-card">
           <h3 class="film-card__title">Santa Claus Conquers the Martians</h3>
           <p class="film-card__rating">2.3</p>
