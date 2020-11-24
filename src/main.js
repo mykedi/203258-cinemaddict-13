@@ -4,12 +4,12 @@ import {createFiltersTemplate} from './view/filters.js';
 import {createFilmsListTemplate} from './view/films-list.js';
 import {createFilmCardTemplate} from './view/film-card.js';
 import {createShowMoreButtonTemplate} from './view/show-more-button.js';
-import {createExtraFilmsListTemplate} from './view/extra-films-list.js';
+import {createTopRatedTemplate} from './view/top-rated.js';
+import {createMostCommentedTemplate} from './view/most-commented.js';
 import {createExtraFilmCardTemplate} from './view/extra-film-card.js';
 import {createFilmCountTemplate} from './view/film-count.js';
 
 const FILM_COUNT = 5;
-const EXTRAS_COUNT = 2;
 const EXTRAS_FILMS_CARD = 2;
 
 const render = (container, template, place) => {
@@ -42,9 +42,8 @@ for (let i = 0; i < FILM_COUNT; i++) {
 render(siteShowMoreButtonElement, createShowMoreButtonTemplate(), `beforeEnd`);
 
 // Extras blocks
-for (let i = 0; i < EXTRAS_COUNT; i++) {
-  render(siteFilmsListElement, createExtraFilmsListTemplate(), `beforeEnd`);
-}
+render(siteFilmsListElement, createTopRatedTemplate(), `beforeEnd`);
+render(siteFilmsListElement, createMostCommentedTemplate(), `beforeEnd`);
 
 const siteExtraFilmsElement = siteFilmsListElement.querySelectorAll(`.films-list--extra`);
 
