@@ -89,12 +89,16 @@ const siteFilmCountElement = siteFooterElement.querySelector(`.footer__statistic
 
 render(siteFilmCountElement, createFilmCountTemplate(films.length), `beforeEnd`);
 
-// Popup
-render(siteMainElement, createFilmPopupTemplate(films[0]), `beforeEnd`);
+const filmPoster = siteMainElement.querySelector(`.film-card__poster`);
+filmPoster.addEventListener(`click`, (evt) => {
+  evt.preventDefault();
+  // Popup
+  render(siteMainElement, createFilmPopupTemplate(films[0]), `beforeEnd`);
 
-// Comments
-const sitePopupCommentsElement = document.querySelector(`.film-details__comments-wrap`);
+  // Comments
+  const sitePopupCommentsElement = document.querySelector(`.film-details__comments-wrap`);
 
-render(sitePopupCommentsElement, createFilmCommentsTemplate(films[0].comments), `beforeEnd`);
-render(sitePopupCommentsElement, createFilmNewCommentTemplate(), `beforeEnd`);
+  render(sitePopupCommentsElement, createFilmCommentsTemplate(films[0].comments), `beforeEnd`);
+  render(sitePopupCommentsElement, createFilmNewCommentTemplate(), `beforeEnd`);
 
+});
