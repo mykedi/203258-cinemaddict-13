@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const createCommentItemTemplate = (comment) => {
   return (
     `<li class="film-details__comment">
@@ -15,11 +17,35 @@ const createCommentItemTemplate = (comment) => {
           </li>`
   );
 };
-export const createFilmCommentsTemplate = (comments) => {
+const createFilmCommentsTemplate = (comments) => {
   const commentFields = comments.map((comment) => createCommentItemTemplate(comment))
     .join(``);
 
   return `<ul class="film-details__comments-list">
-          ${commentFields}
+            ${commentFields}
         </ul>`;
 };
+
+
+export default class Comment {
+  constructor(comments) {
+    this._comments = comments;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmCommentsTemplate(this._comments);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

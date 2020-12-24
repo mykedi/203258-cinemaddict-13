@@ -1,4 +1,4 @@
-import {isActive} from "../utils.js";
+import {isActive, createElement} from "../utils.js";
 
 const cutDescription = (text) => {
   const limit = 140;
@@ -10,7 +10,7 @@ const cutDescription = (text) => {
   return text.trim() + `...`;
 };
 
-export const createFilmCardTemplate = (film) => {
+const createFilmCardTemplate = (film) => {
   const {poster, title, description, rating, genre, releaseDate, isInWatchlist, isFavorite, isWatched, runtime, comments} = film;
   const releaseYear = releaseDate.format(`YYYY`);
   const runtimeInHours = runtime.hours === 0 ? `` : `${runtime.hours}h`;
@@ -34,3 +34,26 @@ export const createFilmCardTemplate = (film) => {
           </div>
         </article>`;
 };
+
+export default class FilmCard {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
