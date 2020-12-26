@@ -1,4 +1,4 @@
-import {capitalize} from "../utils";
+import {createElement, capitalize} from "../utils.js";
 
 const createFilterItemTemplate = (filter, isActive) => {
   const {name, count} = filter;
@@ -14,12 +14,35 @@ const createFilterItemTemplate = (filter, isActive) => {
       </a>`);
 };
 
-export const createFiltersTemplate = (filterItems) => {
+const createFiltersTemplate = (filterItems) => {
   const filterItemsTemplate = filterItems
     .map((filter, index) => createFilterItemTemplate(filter, index === 0))
     .join(``);
+
   return `<div class="main-navigation__items">
     ${filterItemsTemplate}
-  </div>
-  <a href="#stats" class="main-navigation__additional">Stats</a>`;
+  </div>`;
 };
+
+export default class Filters {
+  constructor(filters) {
+    this._filters = filters;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFiltersTemplate(this._filters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
