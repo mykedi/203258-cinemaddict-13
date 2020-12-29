@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import * as relativeTime from "dayjs/plugin/relativeTime";
 import {FILM_INFO, COMMENTS} from "../const.js";
-import {getRandomInteger, generateDate} from "../utils.js";
+import {getRandomInteger, generateDate} from "../utils/common.js";
 dayjs.extend(relativeTime);
 
 const generateInfo = (field) => {
