@@ -6,6 +6,7 @@ import SortView from './view/sort.js';
 import FilmsView from './view/films.js';
 import FilmsListView from './view/films-list.js';
 import FilmCardView from './view/film-card.js';
+import NoFilm from './view/no-film.js';
 import ShowMoreButtonView from './view/show-more-button.js';
 import {createTopRatedTemplate} from './view/top-rated.js';
 import {createMostCommentedTemplate} from './view/most-commented.js';
@@ -43,11 +44,16 @@ const siteMenuComponent = new SiteMenuView();
 render(siteMainElement, siteMenuComponent.getElement(), renderPosition.BEFOREEND);
 render(siteMenuComponent.getElement(), new FiltersView(filters).getElement(), renderPosition.BEFOREEND);
 render(siteMenuComponent.getElement(), new StatsView().getElement(), renderPosition.BEFOREEND);
-render(siteMainElement, new SortView().getElement(), renderPosition.BEFOREEND);
 
 // Content
 const filmsComponent = new FilmsView();
 render(siteMainElement, filmsComponent.getElement(), renderPosition.BEFOREEND);
+
+if (!films.length) {
+  render(filmsComponent.getElement(), new NoFilm().getElement(), renderPosition.BEFOREEND);
+} else {
+  render(siteMainElement, new SortView().getElement(), renderPosition.BEFOREEND);
+}
 
 const filmsListComponent = new FilmsListView();
 render(filmsComponent.getElement(), filmsListComponent.getElement(), renderPosition.BEFOREEND);
@@ -62,37 +68,54 @@ const renderFilm = (filmListElement, film) => {
 
   render(filmListElement, filmCardComponent.getElement(), renderPosition.BEFOREEND);
 
+  const renderPopup = (i) => {
+    // render Popup
+    siteMainElement.appendChild(popupComponent.getElement());
+
+    const filmDetailsComponent = popupComponent.getElement().querySelector(`.film-details__inner`);
+    render(filmDetailsComponent, new FilmDetails(i).getElement(), renderPosition.BEFOREEND);
+
+    // render Comments
+    render(filmDetailsComponent, filmCommentsComponent.getElement(), renderPosition.BEFOREEND);
+
+    const commentComponent = filmCommentsComponent.getElement().querySelector(`.film-details__comments-wrap`);
+
+    render(commentComponent, new Comment(i.comments).getElement(), renderPosition.BEFOREEND);
+    render(commentComponent, new FilmNewComment().getElement(), renderPosition.BEFOREEND);
+  };
+
+  const removePopup = () => {
+    document.body.classList.remove(`hide-overflow`);
+    siteMainElement.removeChild(popupComponent.getElement());
+    popupComponent.removeElement();
+  };
+
   const filmPoster = filmCardComponent.getElement().querySelector(`.film-card__poster`);
   const filmTitle = filmCardComponent.getElement().querySelector(`.film-card__title`);
   const filmComments = filmCardComponent.getElement().querySelector(`.film-card__comments`);
 
   [filmPoster, filmTitle, filmComments].forEach((item) => item.addEventListener(`click`, (evt) => {
     evt.preventDefault();
+    document.addEventListener(`keydown`, onEscKeyDown);
     document.body.classList.add(`hide-overflow`);
-    // Popup
-    render(siteMainElement, popupComponent.getElement(), renderPosition.BEFOREEND);
-
-    const filmDetailsComponent = popupComponent.getElement().querySelector(`.film-details__inner`);
-    render(filmDetailsComponent, new FilmDetails(film).getElement(), renderPosition.BEFOREEND);
-
-    // Comments
-    render(filmDetailsComponent, filmCommentsComponent.getElement(), renderPosition.BEFOREEND);
-
-    const commentComponent = filmCommentsComponent.getElement().querySelector(`.film-details__comments-wrap`);
-
-    render(commentComponent, new Comment(film.comments).getElement(), renderPosition.BEFOREEND);
-    render(commentComponent, new FilmNewComment().getElement(), renderPosition.BEFOREEND);
+    renderPopup(film);
 
     const popupCloseButton = popupComponent.getElement().querySelector(`.film-details__close-btn`);
 
     popupCloseButton.addEventListener(`click`, (ev) => {
       ev.preventDefault();
-      document.body.classList.remove(`hide-overflow`);
-      popupComponent.getElement().remove();
-      popupComponent.removeElement();
+      removePopup();
+      document.removeEventListener(`keydown`, onEscKeyDown);
     });
-
   }));
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
+      removePopup();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
 };
 
 for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
