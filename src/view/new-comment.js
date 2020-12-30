@@ -1,5 +1,5 @@
 import {COMMENTS} from "../const.js";
-import {createElement} from "../utils";
+import AbstractView from "./abstract";
 
 const createNewCommentItemTemplate = (emoji) => {
   return (
@@ -29,24 +29,8 @@ const createFilmNewCommentTemplate = () => {
         </div>`;
 };
 
-export default class FilmNewComment {
-  constructor() {
-    this._element = null;
-  }
-
+export default class FilmNewComment extends AbstractView {
   getTemplate() {
     return createFilmNewCommentTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

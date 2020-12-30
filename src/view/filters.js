@@ -1,4 +1,5 @@
-import {createElement, capitalize} from "../utils.js";
+import {capitalize} from "../utils/film.js";
+import AbstractView from "./abstract";
 
 const createFilterItemTemplate = (filter, isActive) => {
   const {name, count} = filter;
@@ -24,25 +25,13 @@ const createFiltersTemplate = (filterItems) => {
   </div>`;
 };
 
-export default class Filters {
+export default class Filters extends AbstractView {
   constructor(filters) {
+    super();
     this._filters = filters;
-    this._element = null;
   }
 
   getTemplate() {
     return createFiltersTemplate(this._filters);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

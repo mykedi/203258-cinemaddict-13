@@ -1,4 +1,5 @@
-import {capitalize, createElement} from "../utils";
+import {capitalize} from "../utils/film.js";
+import AbstractView from "./abstract";
 
 const getUserRank = (watchedFilms) => {
   if (watchedFilms <= 10) {
@@ -18,25 +19,13 @@ const createProfileHeaderTemplate = (watchedFilms) => {
   </section>`;
 };
 
-export default class ProfileHeader {
+export default class ProfileHeader extends AbstractView {
   constructor(watchedFilms) {
+    super();
     this._watchedFilms = watchedFilms;
-    this._element = null;
   }
 
   getTemplate() {
     return createProfileHeaderTemplate(this._watchedFilms);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
-import {capitalize, createElement} from "../utils";
+import {capitalize} from "../utils/film.js";
+import AbstractView from "./abstract";
 
 const createInfoItemTemplate = (field) => {
   const capitalizedTitle = capitalize(field[0]).replace(/([a-z0-9])([A-Z])/g, `$1 $2`);
@@ -82,25 +83,13 @@ const createFilmPopupTemplate = (film) => {
     </div>`;
 };
 
-export default class FilmDetails {
+export default class FilmDetails extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
   }
 
   getTemplate() {
     return createFilmPopupTemplate(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

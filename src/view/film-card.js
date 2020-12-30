@@ -1,4 +1,5 @@
-import {isActive, createElement} from "../utils.js";
+import {isActive} from "../utils/film.js";
+import AbstractView from "./abstract";
 
 const cutDescription = (text) => {
   const limit = 140;
@@ -35,25 +36,27 @@ const createFilmCardTemplate = (film) => {
         </article>`;
 };
 
-export default class FilmCard {
+export default class FilmCard extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
+    this._showDetailsClickHandler = this._showDetailsClickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _showDetailsClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.detailsClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setShowDetailsClickHandler(callback) {
+    this._callback.detailsClick = callback;
+    [this.getElement().querySelector(`.film-card__poster`),
+      this.getElement().querySelector(`.film-card__title`),
+      this.getElement().querySelector(`.film-card__comments`)]
+      .forEach((item) => item.addEventListener(`click`, this._showDetailsClickHandler));
   }
 }
