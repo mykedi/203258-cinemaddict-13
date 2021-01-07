@@ -25,7 +25,10 @@ const createFilterItemTemplate = (filter) => {
       name="${filter.name}"
       ${filter.checked ? `checked` : ``}
     />
-    <label for="${filter.name}" class="film-details__control-label film-details__control-label--${filter.name}">
+    <label
+      for="${filter.name}"
+      class="film-details__control-label film-details__control-label--${filter.name}"
+    >
       ${filter.label}
     </label>`
   );
@@ -57,7 +60,7 @@ const createFilmPopupTemplate = (film) => {
   const details = Object.entries(fields).map((item) => createInfoItemTemplate(item))
     .join(``);
 
-  const filters = {watchlist: isInWatchlist, favorite: isFavorite, watched: isWatched};
+  const filters = {watchlist: isInWatchlist, watched: isWatched, favorite: isFavorite};
   const labels = {
     watchlist: `Add to watchlist`,
     favorite: `Add to favorites`,
@@ -119,33 +122,33 @@ export default class FilmDetails extends AbstractView {
 
   _favoriteClickHandler(evt) {
     evt.preventDefault();
-    this._callback.favoriteClick();
+    this._callback.favoritePopupClick();
   }
 
   _inWatchListClickHandler(evt) {
     evt.preventDefault();
-    this._callback.inWatchListClick();
+    this._callback.inWatchListPopupClick();
   }
 
   _watchedFilmClickHandler(evt) {
     evt.preventDefault();
-    this._callback.watchedFilmClick();
+    this._callback.watchedFilmPopupClick();
   }
 
   setFavoriteClickHandler(callback) {
-    this._callback.favoriteClick = callback;
+    this._callback.favoritePopupClick = callback;
     this.getElement().querySelector(`.film-details__control-label--favorite`)
       .addEventListener(`click`, this._favoriteClickHandler);
   }
 
   setInWatchListClickHandler(callback) {
-    this._callback.inWatchListClick = callback;
+    this._callback.inWatchListPopupClick = callback;
     this.getElement().querySelector(`.film-details__control-label--watchlist`)
       .addEventListener(`click`, this._inWatchListClickHandler);
   }
 
   setWatchedFilmClickHandler(callback) {
-    this._callback.watchedFilmClick = callback;
+    this._callback.watchedFilmPopupClick = callback;
     this.getElement().querySelector(`.film-details__control-label--watched`)
       .addEventListener(`click`, this._watchedFilmClickHandler);
   }

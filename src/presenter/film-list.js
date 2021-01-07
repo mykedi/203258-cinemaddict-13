@@ -6,6 +6,8 @@ import NoFilm from "../view/no-film";
 import FilmPresenter from './film.js';
 import {render, renderPosition, remove} from "../utils/render.js";
 import {updateItem} from "../utils/common.js";
+import {sortFilmDownByRating, sortFilmDownByDate} from "../utils/film.js";
+import {SortType} from "../const.js";
 
 const FILM_COUNT_PER_STEP = 5;
 
@@ -14,6 +16,7 @@ export default class FilmList {
     this._boardContainer = boardContainer;
     this._renderedFilmCount = FILM_COUNT_PER_STEP;
     this._filmPresenter = {};
+    this._currentSortType = SortType.DEFAULT;
 
     this._filmsComponent = new FilmsView();
     this._filmsSortComponent = new SortView();
@@ -24,10 +27,12 @@ export default class FilmList {
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(boardFilms) {
     this._boardFilms = boardFilms.slice();
+    this._sourcedBoardFilms = boardFilms.slice();
 
     this._renderSort();
     render(this._boardContainer, this._filmsComponent, renderPosition.BEFOREEND);
@@ -46,8 +51,33 @@ export default class FilmList {
       .forEach((presenter) => presenter.resetView());
   }
 
+  _sortFilms(sortType) {
+    switch (sortType) {
+      case SortType.DATE_DOWN:
+        this._boardFilms.sort(sortFilmDownByDate);
+        break;
+      case SortType.RATING_UP:
+        this._boardFilms.sort(sortFilmDownByRating);
+        break;
+      default:
+        this._boardFilms = this._sourcedBoardFilms.slice();
+    }
+
+    this._currentSortType = sortType;
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+    this._sortFilms(sortType);
+    this._clearFilmList();
+    this._renderFilmsList();
+  }
+
   _renderSort() {
     render(this._boardContainer, this._filmsSortComponent, renderPosition.BEFOREEND);
+    this._filmsSortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderFilm(film) {

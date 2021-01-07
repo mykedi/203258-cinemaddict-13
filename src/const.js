@@ -40,4 +40,8 @@ export const COMMENTS = {
   emoji: [`smile`, `sleeping`, `puke`, `angry`],
 };
 
-
+export const SortType = {
+  DEFAULT: `default`,
+  DATE_DOWN: `date-down`,
+  RATING_UP: `rating-up`
+};

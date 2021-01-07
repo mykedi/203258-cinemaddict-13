@@ -10,6 +10,7 @@ const createFilmPopupTemplate = () => {
 export default class FilmPopup extends AbstractView {
   constructor() {
     super();
+
     this._closePopup = this._closePopup.bind(this);
   }
 
