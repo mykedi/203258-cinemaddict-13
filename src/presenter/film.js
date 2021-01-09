@@ -137,7 +137,6 @@ export default class Film {
             this._film,
             {
               isFavorite: !this._film.isFavorite,
-              isInWatchlist: false
             }
         )
     );
@@ -150,8 +149,6 @@ export default class Film {
             this._film,
             {
               isInWatchlist: !this._film.isInWatchlist,
-              isWatched: false,
-              isFavorite: false,
             }
         )
     );
@@ -164,7 +161,6 @@ export default class Film {
             this._film,
             {
               isWatched: !this._film.isWatched,
-              isInWatchlist: false
             }
         )
     );
