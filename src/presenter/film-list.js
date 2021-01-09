@@ -3,6 +3,7 @@ import SortView from "../view/sort";
 import FilmsListView from "../view/films-list";
 import ShowMoreButtonView from "../view/show-more-button";
 import NoFilm from "../view/no-film";
+// import FilmPresenter from './film.js';
 import FilmPresenter from './film.js';
 import {render, renderPosition, remove} from "../utils/render.js";
 import {updateItem} from "../utils/common.js";
