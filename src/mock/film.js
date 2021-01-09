@@ -10,6 +10,8 @@ const generateInfo = (field) => {
   return field[randomIndex];
 };
 
+const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 // Генерируем комментарии к фильму
 const generateComments = () => {
   const commentsCount = getRandomInteger(0, 5);
@@ -40,6 +42,7 @@ export const generateFilm = () => {
   const minutes = getRandomInteger(0, 59);
 
   return {
+    id: generateId(),
     poster: generateInfo(poster),
     title: generateInfo(title),
     description: generateInfo(description),

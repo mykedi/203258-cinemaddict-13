@@ -1,4 +1,4 @@
-const taskToFilterMap = {
+const filmToFilterMap = {
   allMovies: (films) => films.length,
   watchlist: (films) => films.filter((film) => film.isInWatchlist).length,
   history: (films) => films.filter((film) => film.isWatched).length,
@@ -6,7 +6,7 @@ const taskToFilterMap = {
 };
 
 export const generateFilter = (films) => {
-  return Object.entries(taskToFilterMap).map(([filterName, countTasks]) => {
+  return Object.entries(filmToFilterMap).map(([filterName, countTasks]) => {
     return {
       name: filterName,
       count: countTasks(films),

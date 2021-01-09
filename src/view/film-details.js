@@ -16,6 +16,21 @@ const createInfoItemTemplate = (field) => {
   );
 };
 
+const createFilterItemTemplate = (filter) => {
+  return (
+    `<input
+      type="checkbox"
+      id="${filter.name}"
+      class="film-details__control-input visually-hidden"
+      name="${filter.name}"
+      ${filter.checked ? `checked` : ``}
+    />
+    <label for="${filter.name}" class="film-details__control-label film-details__control-label--${filter.name}">
+      ${filter.label}
+    </label>`
+  );
+};
+
 const createFilmPopupTemplate = (film) => {
   const {
     poster,
@@ -29,7 +44,10 @@ const createFilmPopupTemplate = (film) => {
     actor,
     writer,
     ageRating,
-    country
+    country,
+    isInWatchlist,
+    isFavorite,
+    isWatched
   } = film;
   const releaseYear = dayjs(releaseDate).format(`YYYY`);
   const runtimeInHours = runtime.hours === 0 ? `` : `${runtime.hours}h`;
@@ -38,6 +56,15 @@ const createFilmPopupTemplate = (film) => {
   const fields = {director, writer, actor, releaseYear, runtime: fullRuntime, country, genre};
   const details = Object.entries(fields).map((item) => createInfoItemTemplate(item))
     .join(``);
+
+  const filters = {watchlist: isInWatchlist, favorite: isFavorite, watched: isWatched};
+  const labels = {
+    watchlist: `Add to watchlist`,
+    favorite: `Add to favorites`,
+    watched: `Already watched`,
+  };
+  const filtersTemplate = Object.entries(filters).map(([filterName, isChecked]) =>
+    createFilterItemTemplate({name: filterName, checked: isChecked, label: labels[filterName]})).join(``);
 
   return `<div class="film-details__top-container">
       <div class="film-details__close">
@@ -71,14 +98,7 @@ const createFilmPopupTemplate = (film) => {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
-        <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
-
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
-        <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
-
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
-        <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
+        ${filtersTemplate}
       </section>
     </div>`;
 };
@@ -87,9 +107,46 @@ export default class FilmDetails extends AbstractView {
   constructor(film) {
     super();
     this._film = film;
+
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._inWatchListClickHandler = this._inWatchListClickHandler.bind(this);
+    this._watchedFilmClickHandler = this._watchedFilmClickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmPopupTemplate(this._film);
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  _inWatchListClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.inWatchListClick();
+  }
+
+  _watchedFilmClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.watchedFilmClick();
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--favorite`)
+      .addEventListener(`click`, this._favoriteClickHandler);
+  }
+
+  setInWatchListClickHandler(callback) {
+    this._callback.inWatchListClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--watchlist`)
+      .addEventListener(`click`, this._inWatchListClickHandler);
+  }
+
+  setWatchedFilmClickHandler(callback) {
+    this._callback.watchedFilmClick = callback;
+    this.getElement().querySelector(`.film-details__control-label--watched`)
+      .addEventListener(`click`, this._watchedFilmClickHandler);
   }
 }
